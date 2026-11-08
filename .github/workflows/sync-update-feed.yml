@@ -1,0 +1,132 @@
+name: Sync public update feed
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+  pull_request:
+    paths: [.github/workflows/sync-update-feed.yml]
+  push:
+    branches: [main]
+    paths: [.github/workflows/sync-update-feed.yml]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: public-update-feed
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    if: github.repository == 'DigitalShamans/DS-Suite-Releases' && github.event_name != 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 4
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: update-feed
+      - name: Copy only verified manifests from the latest published release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          import re
+          import subprocess
+
+          repo = 'DigitalShamans/DS-Suite-Releases'
+          names = ('suite-feed-v2.json', 'suite-feed.json')
+          legacy_ids = {'ds.image-processor', 'ds.spreadsheet', 'ds.cost-calculator', 'ds.suite-manager'}
+          if os.environ['GITHUB_REPOSITORY'] != repo:
+              raise SystemExit('This workflow belongs to the public Suite release repository.')
+
+          def latest():
+              return json.loads(subprocess.check_output(
+                  ['gh', 'api', f'repos/{repo}/releases/latest'], timeout=30))
+
+          def describe(release):
+              tag = release.get('tag_name', '')
+              if (release.get('draft') is not False or release.get('prerelease') is not False
+                      or not re.fullmatch(r'suite-v[0-9]+\.[0-9]+', tag)):
+                  raise SystemExit('Expected a stable published Suite release.')
+              manifests = {}
+              for name in names:
+                  matches = [a for a in release['assets'] if a['name'] == name]
+                  if len(matches) != 1:
+                      raise SystemExit(f'Expected exactly one published {name}.')
+                  asset = matches[0]
+                  if (asset.get('state') != 'uploaded' or type(asset.get('id')) is not int or asset['id'] <= 0
+                          or type(asset.get('size')) is not int or not 0 < asset['size'] <= 1_048_576
+                          or not re.fullmatch(r'sha256:[a-f0-9]{64}', asset.get('digest') or '')):
+                      raise SystemExit(f'Invalid metadata for published {name}.')
+                  manifests[name] = (asset['id'], asset['size'], asset['digest'])
+              return release['id'], tag, manifests
+
+          snapshot = describe(latest())
+          _, tag, manifests = snapshot
+          content = {}
+          for name, (identifier, size, digest) in manifests.items():
+              data = subprocess.check_output(
+                  ['gh', 'api', f'repos/{repo}/releases/assets/{identifier}',
+                   '--header', 'Accept: application/octet-stream'], timeout=45)
+              if len(data) != size or 'sha256:' + hashlib.sha256(data).hexdigest() != digest:
+                  raise SystemExit(f'Published {name} did not match its size or SHA-256.')
+              content[name] = data
+
+          extended, legacy = (json.loads(content[name]) for name in names)
+          expected_legacy = [entry for entry in extended['apps'] if entry['id'] in legacy_ids]
+          if (extended.get('schemaVersion') != 1 or extended.get('os') != 'windows' or extended.get('arch') != 'x64'
+                  or len(expected_legacy) != len(legacy_ids) or {a['id'] for a in expected_legacy} != legacy_ids
+                  or legacy != {**extended, 'apps': expected_legacy}):
+              raise SystemExit('The published feeds disagree on the legacy application list.')
+          if describe(latest()) != snapshot:
+              raise SystemExit('Latest changed during verification. Run the sync for the new release.')
+
+          for name, data in content.items():
+              Path(name).write_bytes(data)
+          subprocess.run(['git', 'add', '--', *names], check=True)
+          difference = subprocess.run(['git', 'diff', '--cached', '--quiet']).returncode
+          if difference == 1:
+              subprocess.run(['git', '-c', 'user.name=Digital Shamans Release Bot',
+                              '-c', 'user.email=41898282+github-actions[bot]@users.noreply.github.com',
+                              'commit', '-m', f'Mirror published update feeds from {tag}'], check=True)
+              subprocess.run(['git', 'push', 'origin', 'HEAD:refs/heads/update-feed'], check=True)
+          elif difference:
+              raise SystemExit('Could not compare the verified feeds to the mirror branch.')
+          print(f'Public update feed matches {tag}.')
+          PY
+      - name: Verify the raw feed can be fetched without credentials
+        run: |
+          commit="$(git rev-parse HEAD)"
+          for name in suite-feed-v2.json suite-feed.json; do
+            curl --fail --silent --show-error --connect-timeout 5 --max-time 20 \
+              "https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/${commit}/${name}" | cmp "$name" -
+          done
+
+  verify-public-copy:
+    if: github.repository == 'DigitalShamans/DS-Suite-Releases' && github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    permissions:
+      contents: read
+    steps:
+      - name: Check the live Manager URL with an unauthenticated request
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          latest="$(gh api "repos/$GITHUB_REPOSITORY/releases/latest")"
+          for name in suite-feed-v2.json suite-feed.json; do
+            expected="$(jq -r --arg name "$name" '.assets[] | select(.name == $name) | .digest' <<< "$latest")"
+            [[ "$expected" =~ ^sha256:[0-9a-f]{64}$ ]]
+            actual="$(curl --fail --silent --show-error --connect-timeout 5 --max-time 20 --max-filesize 1048576 \
+              "https://raw.githubusercontent.com/$GITHUB_REPOSITORY/update-feed/$name" | sha256sum)"
+            [[ "sha256:${actual%% *}" == "$expected" ]]
+            printf 'Verified the public raw address for %s.\n' "$name"
+          done
