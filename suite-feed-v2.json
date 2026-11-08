@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "os": "windows",
+  "arch": "x64",
+  "apps": [
+    {
+      "id": "ds.image-processor",
+      "version": "1.21",
+      "packageUrl": "https://github.com/DigitalShamans/DS-Suite-Releases/releases/download/suite-v0.06/DSImageProcessor_Setup.exe",
+      "sha256": "69a4e7872a8826ce6df1761dd34335c8b48814407110d1b93d0d0ecefdf07d01",
+      "sizeBytes": 71340129
+    },
+    {
+      "id": "ds.spreadsheet",
+      "version": "0.08",
+      "packageUrl": "https://github.com/DigitalShamans/DS-Suite-Releases/releases/download/suite-v0.17/DSSpreadsheet_Setup.exe",
+      "sha256": "927f1fad0dee99657b47324084bec61a0e32371aff6967f72e584de2a0a04e51",
+      "sizeBytes": 53479399
+    },
+    {
+      "id": "ds.cost-calculator",
+      "version": "1.19",
+      "packageUrl": "https://github.com/DigitalShamans/DS-Suite-Releases/releases/download/suite-v0.06/DSCostCalculator_Setup.exe",
+      "sha256": "bc62865590c22bcdb259a79aea9342a9e8a90db78f7b980dadd7d97911a9d2ff",
+      "sizeBytes": 648011
+    },
+    {
+      "id": "ds.suite-manager",
+      "version": "0.11.2",
+      "packageUrl": "https://github.com/DigitalShamans/DS-Suite-Releases/releases/download/suite-v0.19/DSSuiteManager_Setup.exe",
+      "sha256": "6af52918b57308382632124ce8d09be8e4e8aa6d658af90e274227a20ea72e43",
+      "sizeBytes": 189280020
+    },
+    {
+      "id": "ds.pdf-editor",
+      "version": "1.10",
+      "packageUrl": "https://github.com/DigitalShamans/DS-Suite-Releases/releases/download/suite-v0.13/DSPDFStudio_Setup.exe",
+      "sha256": "cffc360fd966cb3a6b6d99faede883686315ab6231007d87362d62da42abbba0",
+      "sizeBytes": 218747001
+    },
+    {
+      "id": "ds.text-editor",
+      "version": "0.06",
+      "packageUrl": "https://github.com/DigitalShamans/DS-Suite-Releases/releases/download/suite-v0.18/DSTextEditor_Setup.exe",
+      "sha256": "fea08168fb125e0f0fa9daf6ae448ac8f62693903714f5e99d208f7dd07117c1",
+      "sizeBytes": 43882094
+    },
+    {
+      "id": "ds.production-manager",
+      "version": "0.01",
+      "packageUrl": "https://github.com/DigitalShamans/DS-Suite-Releases/releases/download/suite-v0.14/DSProductionManager_Setup.exe",
+      "sha256": "486eb80e17dae9dd5a3d790a3d4fe75f6789d1a26277f8a69f0c27199a3ba4bb",
+      "sizeBytes": 43726110
+    }
+  ]
+}
