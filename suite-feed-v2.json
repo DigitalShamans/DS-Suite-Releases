@@ -12,10 +12,10 @@
     },
     {
       "id": "ds.spreadsheet",
-      "version": "0.10",
-      "packageUrl": "https://github.com/DigitalShamans/DS-Suite-Releases/releases/download/suite-v0.22/DSSpreadsheet_Setup.exe",
-      "sha256": "291229ea0f78626f42eb4baed7e4d8ad39a5b09c76ba1639cfa19e7eb1ef0b80",
-      "sizeBytes": 53508827
+      "version": "0.11",
+      "packageUrl": "https://github.com/DigitalShamans/DS-Suite-Releases/releases/download/suite-v0.25/DSSpreadsheet_Setup.exe",
+      "sha256": "8f67031b137e6fbf1f7cabb9375c9014562d296e5980528bf8c863a7f21cf9a3",
+      "sizeBytes": 53537629
     },
     {
       "id": "ds.cost-calculator",
@@ -40,10 +40,10 @@
     },
     {
       "id": "ds.text-editor",
-      "version": "0.07",
-      "packageUrl": "https://github.com/DigitalShamans/DS-Suite-Releases/releases/download/suite-v0.20/DSTextEditor_Setup.exe",
-      "sha256": "9ab79e63a62f56c8ef4213df45d3308e65018f05135bf80bbb86ceae07639234",
-      "sizeBytes": 44014591
+      "version": "0.08",
+      "packageUrl": "https://github.com/DigitalShamans/DS-Suite-Releases/releases/download/suite-v0.25/DSTextEditor_Setup.exe",
+      "sha256": "e9d4dc66a36606e5c551d60b2ce1ea65b64ac0071da2b0d39afb9389eb7d2471",
+      "sizeBytes": 44055055
     },
     {
       "id": "ds.production-manager",
