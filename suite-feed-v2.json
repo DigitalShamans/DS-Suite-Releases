@@ -33,10 +33,10 @@
     },
     {
       "id": "ds.pdf-editor",
-      "version": "1.16",
-      "packageUrl": "https://github.com/DigitalShamans/DS-Suite-Releases/releases/download/suite-v0.41/DSPDFStudio_Setup.exe",
-      "sha256": "2d935d293c6f4b8a9625e3e33cee20f9da18145b98de3c2624210884f806d4e5",
-      "sizeBytes": 240750364
+      "version": "1.17",
+      "packageUrl": "https://github.com/DigitalShamans/DS-Suite-Releases/releases/download/suite-v0.42/DSPDFStudio_Setup.exe",
+      "sha256": "34a5c84140928e82ee19ec5183d1ca280b4b6486c7b68726225a9b762ecc8f8e",
+      "sizeBytes": 240736916
     },
     {
       "id": "ds.text-editor",
