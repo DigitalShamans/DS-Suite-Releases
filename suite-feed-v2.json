@@ -40,10 +40,10 @@
     },
     {
       "id": "ds.text-editor",
-      "version": "0.20",
-      "packageUrl": "https://github.com/DigitalShamans/DS-Suite-Releases/releases/download/suite-v0.48/DSTextEditor_Setup.exe",
-      "sha256": "f75872aae286c423e1fce3ece5ea41cc31cea0f32dd63a8572b99fe36a003c50",
-      "sizeBytes": 44713449
+      "version": "0.22",
+      "packageUrl": "https://github.com/DigitalShamans/DS-Suite-Releases/releases/download/suite-v0.50/DSTextEditor_Setup.exe",
+      "sha256": "b6619382da974de4fa0122e5af500fa9f50c6fa5f69890a9df3724956ecfe5b6",
+      "sizeBytes": 44752772
     },
     {
       "id": "ds.production-manager",
