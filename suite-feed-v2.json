@@ -54,10 +54,10 @@
     },
     {
       "id": "ds.gallery-editor",
-      "version": "0.12",
-      "packageUrl": "https://github.com/DigitalShamans/DS-Suite-Releases/releases/download/suite-v0.52/DSGalleryEditor_Setup.exe",
-      "sha256": "1031130440a0bfecfebb6d7fdb4f2a146d8359004ee4734bd177a864a9b4e2f0",
-      "sizeBytes": 67252715
+      "version": "0.13",
+      "packageUrl": "https://github.com/DigitalShamans/DS-Suite-Releases/releases/download/suite-v0.53/DSGalleryEditor_Setup.exe",
+      "sha256": "8acd4a5c69381d3ed00015b29de89a23aa43569fe0b45dd6ec1213f7852fed16",
+      "sizeBytes": 67237912
     }
   ]
 }
